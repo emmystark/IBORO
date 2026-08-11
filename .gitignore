@@ -1,0 +1,57 @@
+# Secrets
+backend/.env
+*.env
+!*.env.example
+
+# Per-customer license (issued individually per sale via
+# deploy/license/issue_license.py - never a shared template file) and this
+# machine's activation lock. Never commit a private key here either -
+# deploy/license/README.md tells you to keep it outside the repo entirely.
+backend/license.json
+backend/.license_activation.json
+deploy/license/*.pem
+deploy/license/private_key.pem
+
+# User data & runtime state (private, machine-specific)
+backend/app.db
+backend/app.db-shm
+backend/app.db-wal
+backend/users.json
+backend/conversations.json
+backend/organizations.json
+backend/network_access.json
+backend/roles.json
+
+# Vector store & indexed documents (regenerable from source, may contain
+# private content embedded from uploaded documents)
+backend/chroma_db/
+backend/chroma_db.bak*/
+backend/data/*
+
+# Python
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Node / Next.js
+node_modules/
+.next/
+frontend/.env.local
+frontend/.env.production
+
+# Cloudflare Worker deploy tooling (deploy/license-server) - the
+# wrangler.toml KV namespace id is real per-deployment config though,
+# don't ignore that one.
+deploy/license-server/node_modules/
+deploy/license-server/.wrangler/
+
+# Local editor config
+.claude/
+
+# Built packaging output (large binaries/installers - built from source
+# via packaging/*/build.sh, never hand-edited, don't belong in git)
+packaging/*/dist/
+
+# OS junk
+.DS_Store

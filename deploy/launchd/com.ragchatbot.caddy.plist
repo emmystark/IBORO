@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.ragchatbot.caddy</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>__CADDY_PATH__</string>
+        <string>run</string>
+        <string>--config</string>
+        <string>__REPO_ROOT__/deploy/caddy/Caddyfile</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>__REPO_ROOT__/deploy/caddy</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>HOME</key>
+        <string>__HOME__</string>
+    </dict>
+
+    <!-- Starts on login and relaunches automatically after every reboot -->
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!-- Restarts automatically if it crashes -->
+    <key>KeepAlive</key>
+    <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>__LOG_DIR__/caddy.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>__LOG_DIR__/caddy.err.log</string>
+
+    <key>ProcessType</key>
+    <string>Interactive</string>
+</dict>
+</plist>

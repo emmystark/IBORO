@@ -1,0 +1,21 @@
+{
+	auto_https off
+}
+
+:8443 {
+	tls internal {
+		on_demand
+	}
+	route {
+		@blocked not remote_ip 127.0.0.1 ::1 100.64.0.0/10 192.168.118.12
+		respond @blocked "Forbidden" 403
+
+		handle /api/* {
+			reverse_proxy 127.0.0.1:8000
+		}
+
+		handle {
+			reverse_proxy 127.0.0.1:3000
+		}
+	}
+}

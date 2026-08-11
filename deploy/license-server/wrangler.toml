@@ -1,0 +1,9 @@
+name = "iboro-license-server"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+# Created by `wrangler kv namespace create LICENSES` - paste the id it
+# prints here before deploying. See deploy/license-server/README.md.
+kv_namespaces = [
+  { binding = "LICENSES", id = "be4f91e64c804c7c9017de855f0b501f" }
+]

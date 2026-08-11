@@ -1,0 +1,12 @@
+[Unit]
+Description=Iboro gateway (Caddy)
+After=network.target
+
+[Service]
+WorkingDirectory=__REPO_ROOT__/deploy/caddy
+ExecStart=__CADDY_PATH__ run --config __REPO_ROOT__/deploy/caddy/Caddyfile
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=default.target

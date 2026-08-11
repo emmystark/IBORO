@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.ragchatbot.backend</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>__REPO_ROOT__/backend/venv/bin/python</string>
+        <string>app.py</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>__REPO_ROOT__/backend</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+
+    <!-- Starts on login and relaunches automatically after every reboot -->
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!-- Restarts automatically if the process crashes (this app has, under
+         heavy system memory pressure - see backend/README notes) -->
+    <key>KeepAlive</key>
+    <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>__LOG_DIR__/backend.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>__LOG_DIR__/backend.err.log</string>
+
+    <key>ProcessType</key>
+    <string>Interactive</string>
+</dict>
+</plist>

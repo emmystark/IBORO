@@ -1,0 +1,564 @@
+@import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Light theme (default). Accent + ink derive from the Iboro mark:
+     graphite ink, one cyan signal accent (deepened here for AA contrast
+     on light surfaces — the raw #3ddbd0 is reserved for the mark itself
+     and for dark-theme accents, where it sits on dark surfaces instead). */
+  :root,
+  :root[data-theme="light"] {
+    --background: 48 12% 94%;
+    --foreground: 0 0% 9%;
+    --card: 48 12% 94%;
+    --card-foreground: 0 0% 9%;
+    --primary: 175 65% 30%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 48 10% 90%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 48 10% 90%;
+    --muted-foreground: 0 0% 42%;
+    --border: 40 8% 82%;
+    --input: 40 8% 82%;
+    --ring: 175 65% 30%;
+    --radius: 0.25rem;
+
+    /* Accent system (deep teal, from the logo's cyan signal) */
+    --accent: #1c7d74;
+    --accent-hover: #16645d;
+    --accent-foreground: #ffffff;
+    --accent-soft: #e3f5f2;
+    --accent-soft-border: #a9dcd6;
+
+    --paper: #f0efe9;
+    --ink: #16181a;
+    --ink-soft: #5c5f61;
+    --ink-faint: #8a8a83;
+    --line: #d8d6cd;
+
+    --surface: #ffffff;
+    --surface-2: #e7e6e0;
+    --surface-selected: #e2e0d8;
+    --surface-hover: #fafaf7;
+    --card-bg: #f6f5f0;
+    --scrollbar-thumb: #d4d4d4;
+    --scrollbar-thumb-hover: #a3a3a3;
+    --code-bg: #f5f5f5;
+    --code-border: #e5e5e5;
+
+    /* Destructive/deleted state - kept as its own token set (not the theme
+       accent) so it reads as an unambiguous warning in both themes. */
+    --danger-bg: #fef2f2;
+    --danger-bg-hover: #fee2e2;
+    --danger-border: #fecaca;
+    --danger-text: #b91c1c;
+
+    color-scheme: light;
+  }
+
+  /* Dark theme: graphite surfaces (matching the logo's mark background)
+     with the brand's bright cyan as the live accent. */
+  :root[data-theme="dark"] {
+    --background: 220 12% 12%;
+    --foreground: 48 15% 94%;
+    --card: 220 12% 14%;
+    --card-foreground: 48 15% 94%;
+    --primary: 174 65% 55%;
+    --primary-foreground: 220 20% 10%;
+    --secondary: 220 10% 20%;
+    --secondary-foreground: 48 15% 94%;
+    --muted: 220 10% 20%;
+    --muted-foreground: 220 6% 65%;
+    --border: 220 10% 24%;
+    --input: 220 10% 24%;
+    --ring: 174 65% 55%;
+    --radius: 0.25rem;
+
+    /* Accent system (the logo's cyan signal, live on dark surfaces) */
+    --accent: #3ddbd0;
+    --accent-hover: #58e2d8;
+    --accent-foreground: #10151a;
+    --accent-soft: rgba(61, 219, 208, 0.12);
+    --accent-soft-border: rgba(61, 219, 208, 0.35);
+
+    --paper: #1b1e24;
+    --ink: #f4f2ee;
+    --ink-soft: #9a9da3;
+    --ink-faint: #75787d;
+    --line: #33373f;
+
+    --surface: #22262e;
+    --surface-2: #2a2e36;
+    --surface-selected: #333844;
+    --surface-hover: #2a2e36;
+    --card-bg: #22262e;
+    --scrollbar-thumb: #3a3e46;
+    --scrollbar-thumb-hover: #4a4e57;
+    --code-bg: #22262e;
+    --code-border: #33373f;
+
+    --danger-bg: rgba(248, 113, 113, 0.12);
+    --danger-bg-hover: rgba(248, 113, 113, 0.2);
+    --danger-border: rgba(248, 113, 113, 0.35);
+    --danger-text: #fca5a5;
+
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--paper);
+  overscroll-behavior-y: none;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", system-ui, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.font-display {
+  font-family: var(--font-display), "Space Grotesk", -apple-system, sans-serif;
+}
+
+/* ── Animations ─────────────────────────────────────────────────────── */
+
+@keyframes messageIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-enter {
+  animation: messageIn 0.2s ease-out forwards;
+}
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(calc(100% + 20px));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.toast-enter {
+  animation: toastSlideIn 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes toastFadeOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(calc(100% + 20px));
+  }
+}
+
+.toast-exit {
+  animation: toastFadeOut 0.2s ease-in forwards;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface-selected) 50%, var(--surface-2) 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+@keyframes dotsTyping {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+.typing-dot {
+  animation: dotsTyping 1.2s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.org-switcher-enter {
+  animation: scaleIn 0.14s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transform-origin: top left;
+}
+
+@keyframes authCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-card-enter {
+  animation: authCardIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.auth-bg {
+  background: var(--paper);
+}
+
+.hover-lift {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Design system: bordered / structured components ──────────────────── */
+
+.btn-accent {
+  background: var(--accent);
+  color: var(--accent-foreground);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  font-weight: 600;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.btn-accent:hover:not(:disabled) {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.btn-accent:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn-accent:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-outline {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.btn-outline:hover:not(:disabled) {
+  border-color: var(--ink-soft);
+  background: var(--surface-hover);
+}
+
+.input-bordered {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--ink);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.input-bordered::placeholder {
+  color: var(--ink-faint);
+}
+
+.input-bordered:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+.card-bordered {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid var(--accent-soft-border);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.badge-outline {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  background: transparent;
+}
+
+.chip-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid var(--accent-soft-border);
+  color: var(--accent);
+  background: var(--surface);
+  transition: background-color 0.15s ease;
+}
+
+.chip-source:hover {
+  background: var(--accent-soft);
+}
+
+.chip-source-active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.citation-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  margin: 0 1px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+  border: 1px solid var(--accent-soft-border);
+  color: var(--accent);
+  background: var(--accent-soft);
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.citation-badge:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+  transform: scale(1.1);
+}
+
+.bubble-user {
+  background: var(--accent);
+  color: var(--accent-foreground);
+  border-radius: 10px;
+}
+
+.bubble-assistant {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  border-radius: 10px;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* ── Focus ring ──────────────────────────────────────────────────────── */
+
+/* :focus-visible {
+  outline: 2px solid #111111;
+  outline-offset: 2px;
+} */
+
+/* ── Prose overrides for assistant messages ─────────────────────────── */
+
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
+.prose code {
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  font-size: 0.85em;
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: 3px;
+  padding: 1px 4px;
+}
+
+.prose pre {
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: 6px;
+  padding: 12px 16px;
+  overflow-x: auto;
+}
+
+/* ── Preloader (Iboro mark: draw & lock) ──────────────────────────────── */
+
+.preloader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: rgba(27, 30, 36, 0.55);
+  backdrop-filter: blur(3px);
+  animation: preloader-fade-in 150ms ease-out;
+}
+
+.preloader-text {
+  font-family: var(--font-mono), "IBM Plex Mono", monospace;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #f4f2ee;
+  letter-spacing: 0.02em;
+}
+
+@keyframes preloader-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes drawRing {
+  0% { stroke-dashoffset: 251; }
+  45% { stroke-dashoffset: 0; }
+  70% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+@keyframes drawRingReset {
+  0%, 70% { opacity: 1; }
+  78% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes lockDot {
+  0%, 48% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.3); opacity: 1; }
+  68% { transform: scale(1); }
+  92% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0); opacity: 0; }
+}
+
+.loader-ring-draw {
+  animation: drawRing 2.6s cubic-bezier(0.65, 0, 0.35, 1) infinite,
+    drawRingReset 2.6s linear infinite;
+}
+
+.loader-ring-dot {
+  transform-origin: 60px 60px;
+  animation: lockDot 2.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+/* ── Brand entrance ─────────────────────────────────────────────────── */
+
+@keyframes logoIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.logo-enter {
+  animation: logoIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.page-enter {
+  animation: pageIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ── Transitions: opt-out for users who prefer reduced motion ────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .message-enter,
+  .toast-enter,
+  .skeleton,
+  .typing-dot,
+  .org-switcher-enter,
+  .auth-card-enter,
+  .hover-lift,
+  .loader-ring-draw,
+  .loader-ring-dot,
+  .logo-enter,
+  .page-enter {
+    animation: none;
+    transition: none;
+  }
+}

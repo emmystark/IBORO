@@ -1,0 +1,20 @@
+{"level":"info","ts":1785329965.81039,"msg":"maxprocs: Leaving GOMAXPROCS=8: CPU quota undefined"}
+{"level":"info","ts":1785329965.8104131,"msg":"GOMEMLIMIT is updated","GOMEMLIMIT":7730941132,"previous":9223372036854775807}
+{"level":"info","ts":1785329965.810418,"msg":"using config from file","file":"Caddyfile"}
+{"level":"info","ts":1785329965.810422,"msg":"adapted config to JSON","adapter":"caddyfile"}
+{"level":"warn","ts":1785329965.8104231,"msg":"Caddyfile input is not formatted; run 'caddy fmt --overwrite' to fix inconsistencies","adapter":"caddyfile","file":"Caddyfile","line":1}
+{"level":"info","ts":1785329965.812033,"logger":"admin","msg":"admin endpoint started","address":"localhost:2019","enforce_origin":false,"origins":["//localhost:2019","//[::1]:2019","//127.0.0.1:2019"]}
+{"level":"info","ts":1785329965.812098,"logger":"http.auto_https","msg":"automatic HTTPS is completely disabled for server","server_name":"srv0"}
+{"level":"info","ts":1785329965.812107,"logger":"tls.cache.maintenance","msg":"started background certificate maintenance","cache":"0x4dec2fb60280"}
+{"level":"warn","ts":1785329965.81233,"logger":"http","msg":"HTTP/2 skipped because it requires TLS","network":"tcp","addr":":8080"}
+{"level":"warn","ts":1785329965.812335,"logger":"http","msg":"HTTP/3 skipped because it requires TLS","network":"tcp","addr":":8080"}
+{"level":"info","ts":1785329965.812337,"logger":"http.log","msg":"server running","name":"srv0","protocols":["h1","h2","h3"]}
+{"level":"info","ts":1785329965.812533,"msg":"autosaved config (load with --resume flag)","file":"/Users/iboro/Library/Application Support/Caddy/autosave.json"}
+{"level":"info","ts":1785329965.8125372,"msg":"serving initial configuration"}
+{"level":"info","ts":1785329965.816043,"logger":"tls","msg":"storage cleaning happened too recently; skipping for now","storage":"FileStorage:/Users/iboro/Library/Application Support/Caddy","instance":"2a11f1ed-b274-448f-a3b7-b3b51c949478","try_again":1785416365.816042,"try_again_in":86399.999999833}
+{"level":"info","ts":1785329965.816173,"logger":"tls","msg":"finished cleaning storage units"}
+{"level":"info","ts":1785331652.7844212,"msg":"shutting down apps, then terminating","signal":"SIGTERM"}
+{"level":"warn","ts":1785331652.788886,"msg":"exiting; byeee!! 👋","signal":"SIGTERM"}
+{"level":"info","ts":1785331652.792454,"logger":"http","msg":"servers shutting down with eternal grace period"}
+{"level":"info","ts":1785331652.800427,"logger":"admin","msg":"stopped previous server","address":"localhost:2019"}
+{"level":"info","ts":1785331652.800556,"msg":"shutdown complete","signal":"SIGTERM","exit_code":0}

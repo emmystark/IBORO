@@ -1,0 +1,7 @@
+{
+  "name": "iboro-license-server",
+  "private": true,
+  "devDependencies": {
+    "wrangler": "^4"
+  }
+}
