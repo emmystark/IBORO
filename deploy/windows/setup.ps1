@@ -32,7 +32,11 @@ function Install-IfMissing($command, $wingetId, $label) {
         Ok "$label already installed"
     } else {
         Write-Host "  Installing $label..."
-        winget install --id $wingetId --silent --accept-package-agreements --accept-source-agreements
+        winget install --id $wingetId --source winget --silent --accept-package-agreements --accept-source-agreements
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "winget failed to install $label (exit code $LASTEXITCODE). See the output above for details."
+            exit 1
+        }
     }
 }
 
