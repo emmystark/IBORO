@@ -15,8 +15,14 @@ function Install-Task($name, $scriptPath) {
     }
     $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$scriptPath`""
     $trigger = New-ScheduledTaskTrigger -AtLogOn
+    # S4U (not the default Interactive logon type) runs the task detached from
+    # the interactive session's console - without this, an RDP disconnect
+    # sends a console control signal that kills every task tied to that
+    # session (exit code 0xC000013A / "control-C exit"), which is exactly
+    # what happens on an EC2 Windows box managed entirely over RDP.
+    $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType S4U -RunLevel Highest
     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -ExecutionTimeLimit ([TimeSpan]::Zero)
-    Register-ScheduledTask -TaskName $name -Action $action -Trigger $trigger -Settings $settings -Description "Iboro - $name" | Out-Null
+    Register-ScheduledTask -TaskName $name -Action $action -Trigger $trigger -Principal $principal -Settings $settings -Description "Iboro - $name" | Out-Null
     Start-ScheduledTask -TaskName $name
     Write-Host "Installed and started $name"
 }
