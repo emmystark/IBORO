@@ -47,7 +47,29 @@ function Install-IfMissing($command, $wingetId, $label) {
     Ok "$label installed"
 }
 
-Install-IfMissing "python" "Python.Python.3.12" "Python"
+# Windows ships a "python" App Execution Alias stub (under WindowsApps) that
+# resolves via Get-Command but just prints a Microsoft Store redirect message
+# instead of running Python - it can shadow a real winget-installed Python on
+# PATH, so resolve past it explicitly rather than trusting Get-Command python.
+function Get-RealPython {
+    $real = Get-Command python -All -ErrorAction SilentlyContinue | Where-Object { $_.Source -notmatch "WindowsApps" } | Select-Object -First 1
+    if ($real) { return $real.Source }
+    return $null
+}
+
+Refresh-Path
+if (-not (Get-RealPython)) {
+    Write-Host "  Installing Python..."
+    winget install --id Python.Python.3.12 --source winget --silent --accept-package-agreements --accept-source-agreements
+    Refresh-Path
+}
+$PythonExe = Get-RealPython
+if (-not $PythonExe) {
+    Write-Error "Python still isn't available after winget install - only the Microsoft Store alias stub was found. Try installing Python manually from python.org, or disable the stub via Settings > Apps > Advanced app settings > App execution aliases, then re-run this script."
+    exit 1
+}
+Ok "Python already installed ($PythonExe)"
+
 Install-IfMissing "node" "OpenJS.NodeJS.LTS" "Node.js"
 Install-IfMissing "ollama" "Ollama.Ollama" "Ollama"
 Install-IfMissing "caddy" "CaddyServer.Caddy" "Caddy"
@@ -99,7 +121,7 @@ if (-not (Test-Path "$RepoRoot\backend\license.json")) {
 Say "Setting up the backend"
 Set-Location "$RepoRoot\backend"
 if (-not (Test-Path "venv\Scripts\python.exe")) {
-    python -m venv venv
+    & $PythonExe -m venv venv
 }
 & venv\Scripts\pip.exe install -q --upgrade pip
 & venv\Scripts\pip.exe install -q -r requirements.txt
