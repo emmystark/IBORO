@@ -123,8 +123,8 @@ Set-Location "$RepoRoot\backend"
 if (-not (Test-Path "venv\Scripts\python.exe")) {
     & $PythonExe -m venv venv
 }
-& venv\Scripts\pip.exe install -q --upgrade pip
-& venv\Scripts\pip.exe install -q -r requirements.txt
+& venv\Scripts\python.exe -m pip install -q --upgrade pip
+& venv\Scripts\python.exe -m pip install -q -r requirements.txt
 Ok "Backend dependencies installed"
 
 if (-not (Test-Path ".env")) {
