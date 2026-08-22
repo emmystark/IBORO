@@ -27,17 +27,24 @@ if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
 # ── System dependencies ────────────────────────────────────────────────
 Say "Checking system dependencies (Python, Node, Ollama, Caddy)"
 
+function Refresh-Path {
+    $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
+}
+
 function Install-IfMissing($command, $wingetId, $label) {
+    Refresh-Path
     if (Get-Command $command -ErrorAction SilentlyContinue) {
         Ok "$label already installed"
-    } else {
-        Write-Host "  Installing $label..."
-        winget install --id $wingetId --source winget --silent --accept-package-agreements --accept-source-agreements
-        if ($LASTEXITCODE -ne 0) {
-            Write-Error "winget failed to install $label (exit code $LASTEXITCODE). See the output above for details."
-            exit 1
-        }
+        return
     }
+    Write-Host "  Installing $label..."
+    winget install --id $wingetId --source winget --silent --accept-package-agreements --accept-source-agreements
+    Refresh-Path
+    if (-not (Get-Command $command -ErrorAction SilentlyContinue)) {
+        Write-Error "$label still isn't available after winget install (exit code $LASTEXITCODE). See the output above for details."
+        exit 1
+    }
+    Ok "$label installed"
 }
 
 Install-IfMissing "python" "Python.Python.3.12" "Python"
