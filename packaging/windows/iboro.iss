@@ -8,7 +8,7 @@
 ; offline installer. Pass via: ISCC.exe /DTHIN=1 iboro.iss
 
 #ifndef THIN
-  #define THIN 0
+  #define THIN "0"
 #endif
 
 [Setup]
@@ -31,7 +31,7 @@ DisableProgramGroupPage=yes
 Source: "..\..\*"; DestDir: "{app}\app"; Flags: recursesubdirs createallsubdirs; \
   Excludes: "node_modules,.next,venv,chroma_db*,data,.git,packaging,*.log,backend\.env,backend\users.json,backend\conversations.json,backend\organizations.json,backend\departments.json,backend\network_access.json,backend\roles.json,backend\.license_activation.json,backend\app.db,backend\app.db-wal,backend\app.db-shm,backend\*-.json,backend\*--.json,frontend\.env.local,frontend\.env.production"
 Source: "start.ps1"; DestDir: "{app}"
-#if THIN == 0
+#if THIN == "0"
 Source: "model\*"; DestDir: "{app}\model"; Flags: recursesubdirs createallsubdirs; Excludes: "README.txt"
 #endif
 
